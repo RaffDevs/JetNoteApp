@@ -1,6 +1,9 @@
 package com.exemple.jetnoteapp.screen
 
+import android.os.Build
 import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,23 +11,27 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.exemple.jetnoteapp.R
 import com.exemple.jetnoteapp.components.NoteButton
 import com.exemple.jetnoteapp.components.NoteTextField
+import com.exemple.jetnoteapp.components.NotesLazyColumn
 import com.exemple.jetnoteapp.model.Note
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NoteScreen(
-    notes: List<Note>
-) {
+fun NoteScreen() {
+    val context = LocalContext.current
+
     val title = remember {
         mutableStateOf("")
     }
@@ -32,6 +39,19 @@ fun NoteScreen(
     val note = remember {
         mutableStateOf("")
     }
+
+    val notes = remember {
+        mutableStateListOf<Note>()
+    }
+
+    fun addNote(note: Note) {
+        notes.add(note)
+    }
+
+    fun removeNote(note: Note) {
+        notes.remove(note)
+    }
+
     Scaffold(
         topBar = {
             MyAppBar()
@@ -72,14 +92,38 @@ fun NoteScreen(
                     text = "Save",
                     onClick = {
                         if (title.value.isNotEmpty() && note.value.isNotEmpty()) {
+                            addNote(
+                                Note(
+                                    title = title.value,
+                                    note = note.value
+                                )
+                            )
+
                             title.value = ""
                             note.value = ""
+
+                            Toast.makeText(
+                                context,
+                                "Note created!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
                         }
                     },
                     modifier = Modifier
                         .padding(vertical = 18.dp)
                 )
+                Divider(modifier = Modifier.padding(10.dp))
+                NotesLazyColumn(
+                    notes = notes,
+                    onNoteClicked = { note ->
+                        removeNote(note)
+                    }
+
+                )
             }
+
+
         }
     }
 
@@ -94,7 +138,7 @@ fun MyAppBar() {
         actions = {
             Icon(
                 imageVector = Icons.Rounded.Notifications,
-                contentDescription = "Icon"
+                contentDescription = "Notification Icon"
             )
         },
         backgroundColor = Color.LightGray
