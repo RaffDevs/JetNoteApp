@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.exemple.jetnoteapp.R
 import com.exemple.jetnoteapp.components.NoteButton
 import com.exemple.jetnoteapp.components.NoteTextField
@@ -29,7 +30,7 @@ import com.exemple.jetnoteapp.model.Note
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NoteScreen() {
+fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val context = LocalContext.current
 
     val title = remember {
@@ -40,17 +41,8 @@ fun NoteScreen() {
         mutableStateOf("")
     }
 
-    val notes = remember {
-        mutableStateListOf<Note>()
-    }
+    val notes = noteViewModel.getAllNotes()
 
-    fun addNote(note: Note) {
-        notes.add(note)
-    }
-
-    fun removeNote(note: Note) {
-        notes.remove(note)
-    }
 
     Scaffold(
         topBar = {
@@ -92,7 +84,7 @@ fun NoteScreen() {
                     text = "Save",
                     onClick = {
                         if (title.value.isNotEmpty() && note.value.isNotEmpty()) {
-                            addNote(
+                            noteViewModel.addNote(
                                 Note(
                                     title = title.value,
                                     note = note.value
@@ -117,7 +109,7 @@ fun NoteScreen() {
                 NotesLazyColumn(
                     notes = notes,
                     onNoteClicked = { note ->
-                        removeNote(note)
+                       noteViewModel.removeNote(note)
                     }
 
                 )

@@ -4,12 +4,14 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.exemple.jetnoteapp.data.NoteDataSource
 import com.exemple.jetnoteapp.screen.NoteScreen
+import com.exemple.jetnoteapp.screen.NoteViewModel
 import com.exemple.jetnoteapp.ui.theme.JetNoteAppTheme
 
 class MainActivity : ComponentActivity() {
