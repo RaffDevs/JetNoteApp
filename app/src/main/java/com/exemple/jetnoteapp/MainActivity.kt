@@ -13,7 +13,9 @@ import com.exemple.jetnoteapp.data.NoteDataSource
 import com.exemple.jetnoteapp.screen.NoteScreen
 import com.exemple.jetnoteapp.screen.NoteViewModel
 import com.exemple.jetnoteapp.ui.theme.JetNoteAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
