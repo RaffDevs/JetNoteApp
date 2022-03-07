@@ -1,7 +1,6 @@
 package com.exemple.jetnoteapp.screen
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,7 +40,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         mutableStateOf("")
     }
 
-    val notes = noteViewModel.getAllNotes()
+    val notes = noteViewModel.noteList.collectAsState().value
 
 
     Scaffold(
@@ -109,7 +108,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                 NotesLazyColumn(
                     notes = notes,
                     onNoteClicked = { note ->
-                       noteViewModel.removeNote(note)
+                       noteViewModel.remoteNote(note)
                     }
 
                 )

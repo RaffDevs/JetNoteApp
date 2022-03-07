@@ -1,11 +1,14 @@
 package com.exemple.jetnoteapp.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
+import java.time.Instant
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Entity(tableName = "notes_table")
 data class Note(
     @PrimaryKey
@@ -13,6 +16,10 @@ data class Note(
 
     @ColumnInfo(name = "title")
     val title: String,
+
+    @ColumnInfo(name = "note")
     val note: String,
-    val entryData: LocalDateTime = LocalDateTime.now()
+
+    @ColumnInfo(name = "entry_data")
+    val entryData: String = Date.from(Instant.now()).toString()
 )
